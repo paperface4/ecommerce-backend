@@ -7,7 +7,10 @@ import com.farrukh.ecommerce.user.repository.UserRepository;
 import com.farrukh.ecommerce.auth.dto.RegisterResponse;
 import java.time.LocalDateTime;
 import com.farrukh.ecommerce.user.entity.User;
+import com.farrukh.ecommerce.role.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import com.farrukh.ecommerce.exception.EmailAlreadyExistsException;
+import com.farrukh.ecommerce.exception.PasswordMismatchException;
 
 @Service
 public class AuthService {
@@ -21,12 +24,12 @@ public class AuthService {
 
     public RegisterResponse register(RegisterRequest request){
         if(!request.getPassword().equals(request.getConfirmPassword())){
-            throw new IllegalArgumentException("Password and Confirm Password do not match");
+            throw new PasswordMismatchException("Password and Confirm Password do not match");
         }
         String normalizedEmail = request.getEmail().trim().toLowerCase();
 
         if(userRepository.existsByEmail(normalizedEmail)){
-            throw new IllegalArgumentException("Email already exists");
+            throw new EmailAlreadyExistsException("Email already exists");
         }
 
         String encodedPassword= passwordEncoder.encode(request.getPassword());
@@ -36,7 +39,7 @@ public class AuthService {
         .lastName(request.getLastName().trim())
         .email(normalizedEmail)
         .password(encodedPassword)
-        .role("ROLE_CUSTOMER")
+        .role(Role.ROLE_CUSTOMER)
         .createdAt(LocalDateTime.now())
         .updatedAt(LocalDateTime.now())
         .build();
@@ -48,7 +51,7 @@ User savedUser = userRepository.save(user);
                 .firstName(savedUser.getFirstName())
                 .lastName(savedUser.getLastName())
                 .email(savedUser.getEmail())
-                .role(savedUser.getRole())
+                .role(savedUser.getRole().name())
                 .createdAt(savedUser.getCreatedAt())
                 .updatedAt(savedUser.getUpdatedAt())
                 .build();
