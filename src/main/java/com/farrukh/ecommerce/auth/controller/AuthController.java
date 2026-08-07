@@ -12,6 +12,8 @@ import jakarta.validation.Valid;
 
 import com.farrukh.ecommerce.auth.dto.RegisterRequest;
 import com.farrukh.ecommerce.auth.dto.RegisterResponse;
+import com.farrukh.ecommerce.auth.dto.LoginRequest;
+import com.farrukh.ecommerce.auth.dto.LoginResponse;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -26,5 +28,11 @@ public class AuthController {
         RegisterResponse response = authService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED)
               .body(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody LoginRequest request) {  
+        LoginResponse response = authService.login(request);
+        return ResponseEntity.ok(response);
     }
 }
