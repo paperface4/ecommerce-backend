@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import com.farrukh.ecommerce.user.entity.User;
 import java.util.Date;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.Claims;
 
 @Service
 public class JwtService {
@@ -36,5 +37,30 @@ public class JwtService {
             .signWith(getSigningKey())
             .compact();
     }
-    
+
+    private Claims extractAllClaims(String token){
+            return Jwts.parser()
+            .verifyWith(getSigningKey())
+            .build()
+            .parseSignedClaims(token)
+            .getPayload();
+
+    }
+    public Long extractUserId(String token){
+          return Long.valueOf(extractAllClaims(token).getSubject());
+    }
+
+    public String extractUserRole(String token){
+        return extractAllClaims(token).get("role", String.class);
+    }
+
+    public boolean isTokenExpired(String token){
+        return extractAllClaims(token).getExpiration().before(new Date());
+    }
+
+    public boolean isTokenValid(String token, User user){
+        final Long userId = extractUserId(token);
+        return (userId.equals(user.getId()) && !isTokenExpired(token));
+    }
+
 }
