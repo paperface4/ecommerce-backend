@@ -8,7 +8,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
+import org.springframework.http.HttpMethod;
 import com.farrukh.ecommerce.security.JwtAuthenticationFilter;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,19 +36,31 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers(
-                                "/api/auth/register",
-                                "/api/auth/login"
-                        ).permitAll()
+                        // Login & registration
+        .requestMatchers(
+                "/api/auth/register",
+                "/api/auth/login"
+        ).permitAll()
 
-                        .anyRequest()
-                        .authenticated()
+        // Anyone can view categories
+        .requestMatchers(
+                HttpMethod.GET,
+                "/api/categories/**"
+        ).permitAll()
+
+        // Only admins can create categories
+        .requestMatchers(
+                HttpMethod.POST,
+                "/api/categories/**"
+        ).hasRole("ADMIN")
+
+        // Everything else requires login
+        .anyRequest().authenticated()
                 )
-
                 .addFilterBefore(
-                        jwtAuthenticationFilter,
-                        UsernamePasswordAuthenticationFilter.class
-                )
+        jwtAuthenticationFilter,
+        UsernamePasswordAuthenticationFilter.class
+)
 
                 .exceptionHandling(exception -> exception
 
