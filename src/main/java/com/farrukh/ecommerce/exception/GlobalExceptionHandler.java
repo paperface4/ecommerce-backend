@@ -41,4 +41,21 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse=buildErrorResponse(status,ex.getMessage(),request.getRequestURI());
         return ResponseEntity.status(status).body(errorResponse);
     }
+    @ExceptionHandler(CategoryAlreadyExistsException.class)
+public ResponseEntity<ErrorResponse> handleCategoryAlreadyExistsException(
+        CategoryAlreadyExistsException ex,
+        HttpServletRequest request) {
+
+    HttpStatus status = HttpStatus.CONFLICT;
+
+    ErrorResponse errorResponse = buildErrorResponse(
+            status,
+            ex.getMessage(),
+            request.getRequestURI()
+    );
+
+    return ResponseEntity
+            .status(status)
+            .body(errorResponse);
+}
 }
