@@ -2,6 +2,7 @@ package com.farrukh.ecommerce.category.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.farrukh.ecommerce.category.dto.CategoryResponse;
 import com.farrukh.ecommerce.category.dto.CreateCategoryRequest;
 import com.farrukh.ecommerce.category.dto.CreateCategoryResponse;
 import com.farrukh.ecommerce.category.service.CategoryService;
@@ -9,12 +10,15 @@ import com.farrukh.ecommerce.category.service.CategoryService;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -29,6 +33,21 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.CREATED)
               .body(response);
     }
+
+    @GetMapping()
+    public ResponseEntity<List<CategoryResponse>>getAllCategory() {
+        List<CategoryResponse> response=categoryService.getAllCategories();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryResponse> getCategoryById( @PathVariable Long id) {
+        CategoryResponse response =categoryService.getCategoryById(id);
+            return ResponseEntity.ok(response);
+        
+    }
+    
+    
     
     
 }

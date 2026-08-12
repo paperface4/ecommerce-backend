@@ -58,4 +58,17 @@ public ResponseEntity<ErrorResponse> handleCategoryAlreadyExistsException(
             .status(status)
             .body(errorResponse);
 }
+@ExceptionHandler(CategoryNotFoundException.class)
+public ResponseEntity<ErrorResponse> handleCategoryNotFoundException(CategoryNotFoundException ex,HttpServletRequest request) {
+    HttpStatus status = HttpStatus.NOT_FOUND;
+    ErrorResponse errorResponse = buildErrorResponse(
+            status,
+            ex.getMessage(),
+            request.getRequestURI()
+    );
+
+    return ResponseEntity
+            .status(status)
+            .body(errorResponse);
+}
 }
