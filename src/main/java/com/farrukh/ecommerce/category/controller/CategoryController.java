@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.farrukh.ecommerce.category.dto.CategoryResponse;
 import com.farrukh.ecommerce.category.dto.CreateCategoryRequest;
 import com.farrukh.ecommerce.category.dto.CreateCategoryResponse;
+import com.farrukh.ecommerce.category.dto.UpdateCategoryRequest;
 import com.farrukh.ecommerce.category.service.CategoryService;
 
 import jakarta.validation.Valid;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
@@ -47,6 +49,11 @@ public class CategoryController {
         
     }
     
+    @PatchMapping("/{id}")
+    public ResponseEntity<CategoryResponse> updateCategory(@Valid @RequestBody UpdateCategoryRequest request,@PathVariable Long id){
+        CategoryResponse response =categoryService.updateCategory(id, request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
     
     
     

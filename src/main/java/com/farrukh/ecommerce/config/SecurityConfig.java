@@ -42,6 +42,11 @@ public class SecurityConfig {
                 "/api/auth/login"
         ).permitAll()
 
+        .requestMatchers(
+                HttpMethod.PATCH,
+                "/api/categories/**"
+        ).hasRole("ADMIN")
+
         // Anyone can view categories
         .requestMatchers(
                 HttpMethod.GET,
@@ -81,6 +86,7 @@ public class SecurityConfig {
                                     );
                                 }
                         )
+                        
                 );
 
         return http.build();
