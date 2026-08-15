@@ -96,4 +96,9 @@ public CategoryResponse getCategoryById(Long id){
                 return response;
 
  }
+
+  public void deleteCategory(Long id){
+    Category category=categoryRepository.findById(id).orElseThrow(()-> new CategoryNotFoundException("No category exists by this id"));
+     categoryRepository.delete(category);
+  }
 }

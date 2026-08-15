@@ -47,6 +47,9 @@ public class SecurityConfig {
                 "/api/categories/**"
         ).hasRole("ADMIN")
 
+        .requestMatchers(HttpMethod.DELETE,"/api/categories/**"
+        ).hasRole("ADMIN")
+
         // Anyone can view categories
         .requestMatchers(
                 HttpMethod.GET,
