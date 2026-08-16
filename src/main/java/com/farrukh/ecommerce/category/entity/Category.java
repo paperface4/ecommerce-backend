@@ -32,6 +32,6 @@ public class Category {
     @Column(nullable=false, updatable=false)
     private LocalDateTime createdAt;
     @UpdateTimestamp
-    @Column(nullable=false, updatable=false)
+    @Column(nullable=false)
     private LocalDateTime updatedAt;
 }
