@@ -34,39 +34,24 @@ public class SecurityConfig {
                         )
                 )
 
-                .authorizeHttpRequests(auth -> auth
+        .authorizeHttpRequests(auth -> auth
 
-                        // Login & registration
-        .requestMatchers(
-                "/api/auth/register",
-                "/api/auth/login"
-        ).permitAll()
+        .requestMatchers("/api/auth/register","/api/auth/login").permitAll()
 
-        .requestMatchers(
-                HttpMethod.PATCH,
-                "/api/categories/**"
-        ).hasRole("ADMIN")
+        .requestMatchers(HttpMethod.PATCH,"/api/categories/**").hasRole("ADMIN")
+        .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
 
-        .requestMatchers(HttpMethod.DELETE,"/api/categories/**"
-        ).hasRole("ADMIN")
+        .requestMatchers(HttpMethod.DELETE,"/api/categories/**").hasRole("ADMIN")
 
-        .requestMatchers(
-        HttpMethod.POST,
-        "/api/products/**"
-        ).hasRole("ADMIN")
-        // Anyone can view categories
-        .requestMatchers(
-                HttpMethod.GET,
-                "/api/categories/**"
-        ).permitAll()
+        .requestMatchers(HttpMethod.GET,"/api/products/**").permitAll()
 
-        // Only admins can create categories
-        .requestMatchers(
-                HttpMethod.POST,
-                "/api/categories/**"
-        ).hasRole("ADMIN")
+        .requestMatchers(HttpMethod.POST,"/api/products/**").hasRole("ADMIN")
 
-        // Everything else requires login
+        .requestMatchers(HttpMethod.GET,"/api/categories/**").permitAll()
+
+        
+        .requestMatchers(HttpMethod.POST,"/api/categories/**").hasRole("ADMIN")
+
         .anyRequest().authenticated()
                 )
                 .addFilterBefore(

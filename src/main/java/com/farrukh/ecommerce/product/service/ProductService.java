@@ -2,10 +2,15 @@ package com.farrukh.ecommerce.product.service;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.farrukh.ecommerce.category.repository.CategoryRepository;
 import com.farrukh.ecommerce.exception.CategoryNotFoundException;
+import com.farrukh.ecommerce.exception.ProductNotFoundException;
 import com.farrukh.ecommerce.product.dto.CreateProductRequest;
 import com.farrukh.ecommerce.product.dto.CreateProductResponse;
+import com.farrukh.ecommerce.product.dto.ProductResponse;
 import com.farrukh.ecommerce.product.repository.ProductRepository;
 import com.farrukh.ecommerce.category.entity.Category;
 import com.farrukh.ecommerce.product.entity.Product;
@@ -42,5 +47,42 @@ public class ProductService {
             savedProduct.getCreatedAt(),
             savedProduct.getUpdatedAt()
         );
+    }
+
+    public List<ProductResponse> getAllProducts(){
+        List<Product> products=productRepository.findAll();
+        List<ProductResponse> responses=new ArrayList<>();
+
+        for(Product product:products){
+            ProductResponse response=new ProductResponse();
+            response.setId(product.getId());
+            response.setName(product.getName());
+            response.setDescription(product.getDescription());
+            response.setBrand(product.getBrand());
+            response.setPrice(product.getPrice());
+            response.setCategoryId(product.getCategory().getId());
+            response.setCategoryName(product.getCategory().getName());
+            response.setActive(product.isActive());
+            response.setCreatedAt(product.getCreatedAt());
+            response.setUpdatedAt(product.getUpdatedAt());
+            responses.add(response);
+        }
+        return responses;
+    }
+
+    public ProductResponse getProductById(Long id){
+        Product product = productRepository.findById(id).orElseThrow(()->new ProductNotFoundException("No product with this Id exists"));
+        ProductResponse response=new ProductResponse();
+        response.setId(product.getId());
+        response.setName(product.getName());
+        response.setDescription(product.getDescription());
+        response.setBrand(product.getBrand());
+        response.setPrice(product.getPrice());
+        response.setCategoryId(product.getCategory().getId());
+        response.setCategoryName(product.getCategory().getName());
+        response.setActive(product.isActive());
+        response.setCreatedAt(product.getCreatedAt());
+        response.setUpdatedAt(product.getUpdatedAt());
+        return response;
     }
 }

@@ -12,10 +12,7 @@ import com.farrukh.ecommerce.category.repository.CategoryRepository;
 import com.farrukh.ecommerce.exception.CategoryAlreadyExistsException;
 import com.farrukh.ecommerce.exception.CategoryNotFoundException;
 
-import jakarta.validation.constraints.Null;
-
 import com.farrukh.ecommerce.category.dto.CategoryResponse;
-import com.farrukh.ecommerce.category.dto.UpdateCategoryRequest;
 
 @Service
 public class CategoryService {

@@ -71,4 +71,12 @@ public ResponseEntity<ErrorResponse> handleCategoryNotFoundException(CategoryNot
             .status(status)
             .body(errorResponse);
 }
+
+@ExceptionHandler(ProductNotFoundException.class)
+public ResponseEntity<ErrorResponse> handleProductNotFoundException(ProductNotFoundException ex ,HttpServletRequest request){
+    HttpStatus status=HttpStatus.NOT_FOUND;
+    ErrorResponse errorResponse = buildErrorResponse(status,ex.getMessage(),request.getRequestURI());
+
+    return ResponseEntity.status(status).body(errorResponse);
+}
 }
