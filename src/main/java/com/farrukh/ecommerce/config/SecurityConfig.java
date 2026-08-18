@@ -52,6 +52,8 @@ public class SecurityConfig {
         
         .requestMatchers(HttpMethod.POST,"/api/categories/**").hasRole("ADMIN")
 
+        .requestMatchers(HttpMethod.PATCH,"/api/products/**").hasRole("ADMIN")
+
         .anyRequest().authenticated()
                 )
                 .addFilterBefore(
@@ -61,16 +63,12 @@ public class SecurityConfig {
 
                 .exceptionHandling(exception -> exception
 
-                        // User is NOT authenticated
-                        // Example: no JWT or invalid JWT
                         .authenticationEntryPoint(
                                 new HttpStatusEntryPoint(
                                         HttpStatus.UNAUTHORIZED
                                 )
                         )
 
-                        // User IS authenticated,
-                        // but does not have the required role
                         .accessDeniedHandler(
                                 (request, response, accessDeniedException) -> {
                                     response.setStatus(

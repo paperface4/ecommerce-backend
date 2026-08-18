@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -34,7 +35,30 @@ public class GlobalExceptionHandler {
                 .build();
 
  
-            }
+          }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+public ResponseEntity<ErrorResponse> handleValidationException(
+        MethodArgumentNotValidException ex,
+        HttpServletRequest request) {
+
+    HttpStatus status = HttpStatus.BAD_REQUEST;
+
+    String message = ex.getBindingResult()
+            .getFieldErrors()
+            .get(0)
+            .getDefaultMessage();
+
+    ErrorResponse errorResponse = buildErrorResponse(
+            status,
+            message,
+            request.getRequestURI()
+    );
+
+    return ResponseEntity
+            .status(status)
+            .body(errorResponse);
+}
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<ErrorResponse> handleInvalidCredentialsException(InvalidCredentialsException ex, HttpServletRequest request){
         HttpStatus status=HttpStatus.UNAUTHORIZED;

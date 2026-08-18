@@ -9,6 +9,7 @@ import java.util.List;
 import com.farrukh.ecommerce.product.dto.CreateProductRequest;
 import com.farrukh.ecommerce.product.dto.CreateProductResponse;
 import com.farrukh.ecommerce.product.dto.ProductResponse;
+import com.farrukh.ecommerce.product.dto.UpdateProductRequest;
 import com.farrukh.ecommerce.product.service.ProductService;
 
 import jakarta.validation.Valid;
@@ -16,6 +17,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -48,6 +50,10 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
     
-    
+    @PatchMapping("/{id}")
+    public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id, @Valid @RequestBody UpdateProductRequest request){
+        ProductResponse response=productService.updateProduct(id, request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
     
 }
