@@ -122,6 +122,10 @@ public class ProductService {
         response.setCreatedAt(product.getCreatedAt());
         response.setUpdatedAt(product.getUpdatedAt());
         return response;
+    }
 
+    public void deleteProduct(Long id){
+        Product product=productRepository.findById(id).orElseThrow(()-> new ProductNotFoundException("no product with this Id exists"));
+        productRepository.delete(product);
     }
 }
